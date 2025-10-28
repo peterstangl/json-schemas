@@ -1,0 +1,513 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://json.schemastore.org/popxf-1.0.json",
+  "$defs": {
+    "monomialKeyPatternDeg1": {
+      "propertyNames": {
+        "pattern": "^\\(\\s*'[^']*'\\s*,\\s*(?:'([IR])')?\\s*,?\\s*\\)$"
+      }
+    },
+    "monomialKeyPatternDeg2": {
+      "propertyNames": {
+        "pattern": "^\\(\\s*(?:'[^']*'\\s*,\\s*){1}'[^']*'(?:,\\s*'([IR]{2})')?\\s*,?\\s*\\)$"
+      }
+    },
+    "monomialKeyPatternDeg3": {
+      "propertyNames": {
+        "pattern": "^\\(\\s*(?:'[^']*'\\s*,\\s*){2}'[^']*'(?:,\\s*'([IR]{3})')?\\s*,?\\s*\\)$"
+      }
+    },
+    "monomialKeyPatternDeg4": {
+      "propertyNames": {
+        "pattern": "^\\(\\s*(?:'[^']*'\\s*,\\s*){3}'[^']*'(?:,\\s*'([IR]{4})')?\\s*,?\\s*\\)$"
+      }
+    },
+    "monomialKeyPatternDeg5": {
+      "propertyNames": {
+        "pattern": "^\\(\\s*(?:'[^']*'\\s*,\\s*){4}'[^']*'(?:,\\s*'([IR]{5})')?\\s*,?\\s*\\)$"
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://json.schemastore.org/popxf-1.0.json"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "observable_names": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "basis": {
+          "type": "object",
+          "properties": {
+            "wcxf": {
+              "type": "object",
+              "properties": {
+                "eft": { "type": "string" },
+                "basis": { "type": "string" },
+                "sectors": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              },
+              "required": [
+                "eft",
+                "basis"
+              ],
+              "additionalProperties": false
+            },
+            "custom": {}
+          },
+          "anyOf": [
+            { "required": ["wcxf"] },
+            { "required": ["custom"] }
+          ],
+          "additionalProperties": false
+        },
+        "parameters": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "scale": {
+          "oneOf": [
+            { "type": "number" },
+            {
+              "type": "array",
+              "items": { "type": "number" }
+            }
+          ]
+        },
+        "reproducibility": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "minProperties": 1,
+            "properties": {
+              "description": { "type": "string" },
+              "inputs": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": [
+                    "number",
+                    "object"
+                  ],
+                  "properties": {
+                    "mean": {
+                      "type": [
+                        "number",
+                        "array"
+                      ],
+                      "items": { "type": "number" }
+                    },
+                    "std": {
+                      "type": [
+                        "number",
+                        "array"
+                      ],
+                      "items": { "type": "number" }
+                    },
+                    "corr": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": { "type": "number" }
+                      }
+                    },
+                    "distribution_type": { "type": "string" },
+                    "distribution_parameters": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": [
+                          "number",
+                          "array"
+                        ],
+                        "items": {
+                          "type": [
+                            "number",
+                            "array"
+                          ],
+                          "items": { "type": "number"}
+                        }
+                      }
+                    },
+                    "distribution_description": { "type": "string" }
+                  },
+                  "dependentRequired": {
+                    "corr": ["std"],
+                    "std": ["mean"],
+                    "distribution_type": [
+                      "distribution_parameters",
+                      "distribution_description"
+                    ],
+                    "distribution_parameters": [
+                      "distribution_type",
+                      "distribution_description"
+                    ],
+                    "distribution_description": [
+                      "distribution_type",
+                      "distribution_parameters"
+                    ]
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "tool": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "version": { "type": "string" },
+                  "settings": { "type": "object" }
+                },
+                "required": ["name"]
+              }
+            }
+          }
+        },
+        "polynomial_names": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "observable_expressions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "variables": {
+                "type": "object",
+                "propertyNames": { "minLength": 1 },
+                "additionalProperties": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "expression": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "variables",
+              "expression"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "polynomial_order": {
+          "type": "integer",
+          "enum": [1,2,3,4,5]
+        },
+        "misc": { "type": "object" }
+      },
+      "required": [
+        "observable_names",
+        "basis",
+        "parameters",
+        "scale"
+      ],
+      "dependentRequired": {
+        "polynomial_names": ["observable_expressions"],
+        "observable_expressions": ["polynomial_names"]
+      },
+      "additionalProperties": false
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "observable_central": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": { "type": "number" }
+          }
+        },
+        "polynomial_central": {
+          "type": "object",
+          "additionalProperties": {
+            "type":  "array",
+            "items": { "type": "number" }
+          }
+        },
+        "observable_uncertainties": {
+          "type": "object",
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": { "type": "number" }
+                }
+              },
+              {
+                "type": "array",
+                "items": { "type": "number" }
+              }
+            ]
+          }
+        }
+      },
+      "anyOf": [
+        { "required": ["observable_central"] },
+        { "required": ["polynomial_central"] }
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "$schema",
+    "metadata",
+    "data"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "metadata": { "required": ["polynomial_names"] }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": { "required": ["polynomial_central"] }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "data": { "required": ["polynomial_central"] }
+        }
+      },
+      "then": {
+        "properties": {
+          "metadata": { "required": ["polynomial_names"] }
+        }
+      }
+    },
+    {
+      "if": {
+        "not": {
+          "properties": {
+            "metadata": { "required": ["polynomial_order"] }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "patternProperties": {
+              "^(observable_central|polynomial_central)$": {
+                "$ref": "#/$defs/monomialKeyPatternDeg2"
+              },
+              "^observable_uncertainties$": {
+                "additionalProperties": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "$ref": "#/$defs/monomialKeyPatternDeg2"
+                    },
+                    {
+                      "type": "array",
+                      "items": { "type": "number" }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "metadata": {
+            "properties": { "polynomial_order": { "const": 1 } },
+            "required": ["polynomial_order"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "patternProperties": {
+              "^(observable_central|polynomial_central)$": {
+                "$ref": "#/$defs/monomialKeyPatternDeg1"
+              },
+              "^observable_uncertainties$": {
+                "additionalProperties": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "$ref": "#/$defs/monomialKeyPatternDeg1"
+                    },
+                    {
+                      "type": "array",
+                      "items": { "type": "number" }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "metadata": {
+            "properties": { "polynomial_order": { "const": 2 } },
+            "required": ["polynomial_order"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "patternProperties": {
+              "^(observable_central|polynomial_central)$": {
+                "$ref": "#/$defs/monomialKeyPatternDeg2"
+              },
+              "^observable_uncertainties$": {
+                "additionalProperties": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "$ref": "#/$defs/monomialKeyPatternDeg2"
+                    },
+                    {
+                      "type": "array",
+                      "items": { "type": "number" }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "metadata": {
+            "properties": { "polynomial_order": { "const": 3 } },
+            "required": ["polynomial_order"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "patternProperties": {
+              "^(observable_central|polynomial_central)$": {
+                "$ref": "#/$defs/monomialKeyPatternDeg3"
+              },
+              "^observable_uncertainties$": {
+                "additionalProperties": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "$ref": "#/$defs/monomialKeyPatternDeg3"
+                    },
+                    {
+                      "type": "array",
+                      "items": { "type": "number" }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "metadata": {
+            "properties": { "polynomial_order": { "const": 4 } },
+            "required": ["polynomial_order"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "patternProperties": {
+              "^(observable_central|polynomial_central)$": {
+                "$ref": "#/$defs/monomialKeyPatternDeg4"
+              },
+              "^observable_uncertainties$": {
+                "additionalProperties": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "$ref": "#/$defs/monomialKeyPatternDeg4"
+                    },
+                    {
+                      "type": "array",
+                      "items": { "type": "number" }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "metadata": {
+            "properties": { "polynomial_order": { "const": 5 } },
+            "required": ["polynomial_order"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "patternProperties": {
+              "^(observable_central|polynomial_central)$": {
+                "$ref": "#/$defs/monomialKeyPatternDeg5"
+              },
+              "^observable_uncertainties$": {
+                "additionalProperties": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "$ref": "#/$defs/monomialKeyPatternDeg5"
+                    },
+                    {
+                      "type": "array",
+                      "items": { "type": "number" }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
