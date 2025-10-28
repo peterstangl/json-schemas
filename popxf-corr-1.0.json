@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://json.schemastore.org/popxf-corr-1.0.json",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://json.schemastore.org/popxf-corr-1.0.json"
+    }
+  },
+  "minProperties": 2,
+  "additionalProperties": {
+    "type": "object",
+    "properties": {
+      "row_names": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "col_names": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "correlations": {
+        "type": "object",
+        "additionalProperties": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": { "type": "number" }
+              }
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": { "type": "number" }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "required": ["row_names", "col_names", "correlations"],
+    "additionalProperties": false
+  },
+  "required": ["$schema"]
+}
