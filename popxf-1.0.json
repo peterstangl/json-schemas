@@ -194,7 +194,7 @@
                     },
                     {
                       "type": "object",
-                      "description": "An object representing an arbitrary user-defined uni- or multi-variate probability distributions describing one or more input parameters. This object contains the following subfields:",
+                      "description": "An object representing an arbitrary user-defined uni- or multi-variate probability distribution describing one or more input parameters. This object contains the following subfields:",
                       "properties": {
                         "distribution_type": {
                           "type": "string",
