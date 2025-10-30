@@ -296,6 +296,27 @@
                         "scale_choice": [91.1876, 125.0]
                       }
                     }
+                  },
+                  {
+                    "tool": {
+                      "name": "analytical calculation",
+                      "settings": {
+                        "gamma5_scheme": "KKS",
+                        "covariant_derivative_sign": "-",
+                        "renormalization":"MSbar (WCs), On-shell (mass, aS, aEW)",
+                        "evanescent":"https://doi.org/10.1016/0550-3213(90)90223-Z"
+                      }
+                    }
+                  },
+                  {
+                    "tool": {
+                      "name":"RGEtool",
+                      "version":"1.0.0",
+                      "settings": {
+                        "perturbative_order": "one-loop",
+                        "approximations": "evolution matrix formalism"
+                      }
+                    }
                   }
                 ]
               }
