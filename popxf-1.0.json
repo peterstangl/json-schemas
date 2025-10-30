@@ -260,7 +260,7 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "name of tool, e.g. `\"MadGraph5_aMC@NLO\"`, `\"POWHEG\"`,  `\"SHERPA\"`, `\"WHIZARD\"`, `\"flavio\"`, `\"FeynCalc\"`, ..."
+                    "description": "name of tool, e.g. `\"MadGraph5_aMC@NLO\"`, `\"POWHEG\"`,  `\"SHERPA\"`, `\"WHIZARD\"`, `\"flavio\"`, `\"FeynCalc\"`, `\"analytical calculation\"`, ..."
                   },
                   "version": {
                     "type": "string",
@@ -268,7 +268,7 @@
                   },
                   "settings": {
                     "type": "object",
-                    "description": "object containing information about the tool settings with free-form substructure. For example:\n      - `perturbative_order` (e.g. `LO`, `NLO`, `NLOQCD`, ...)\n      - `UFO`: name and version of UFO model used, as well as any other relevant information such as flavor schemes or webpage link.\n      - `scale_choice`: Nominal scale choice employed when computing the predictions. This could be a list of fixed scales or a string describing a dynamical scale choice like `dynamical:HT/2`. This field is particularly relevant when RGE effects are folded into the prediction, see the description of `metadata.scale` above.\n      - `RGE`: details of the implementation of any RGE effects folded into the computation, e.g. code and version used, perturbative order, any approximations made such as the use of the evolution matrix formalism.\n      - `analytical`: Technical details documenting conventions and methods used when the predictions are obtained from analytical calculations, e.g., scheme choices for `gamma5`, `covariant_derivative_sign`,  `renormalization`."
+                    "description": "object containing information about the tool settings with free-form substructure. For example:\n      - `perturbative_order` (e.g. `LO`, `NLO`, `NLOQCD`, ...)\n      - `PDF`: name, version, and set of the PDF used.\n      - `UFO`: name and version of UFO model used, as well as any other relevant information such as flavor schemes or webpage link.\n      - `scale_choice`: Nominal scale choice employed when computing the predictions. This could be a list of fixed scales or a string describing a dynamical scale choice like `dynamical:HT/2`. This field is particularly relevant when RGE effects are folded into the prediction, see the description of `metadata.scale` above.\n      - `renormalization_scheme`: details of the renormalization scheme used in the computation.\n      - `covariant_derivative_sign`: sign convention used for the covariant derivative (\"+\" or \"-\").\n      - `gamma5_scheme`: scheme used for $\\gamma_5$ in dimensional regularization (\"BMHV\",\"KKS\", ...).\n      - `evanescent`: details of the treatment of evanescent operators, e.g. a reference to the scheme used.\n      - `approximations`: Any relevant approximations used, such as the use of the first leading-logarithmic approximation for RG evolution.\n      - any other relevant settings specific to the tool or calculation."
                   }
                 },
                 "required": ["name"],
@@ -305,7 +305,7 @@
                       "settings": {
                         "gamma5_scheme": "KKS",
                         "covariant_derivative_sign": "-",
-                        "renormalization":"MSbar (WCs), On-shell (mass, aS, aEW)",
+                        "renormalization_scheme":"MSbar (WCs), On-shell (mass, aS, aEW)",
                         "evanescent":"https://doi.org/10.1016/0550-3213(90)90223-Z"
                       }
                     }
@@ -316,7 +316,7 @@
                       "version":"1.0.0",
                       "settings": {
                         "perturbative_order": "one-loop",
-                        "approximations": "evolution matrix formalism"
+                        "method": "evolution matrix formalism"
                       }
                     }
                   }
