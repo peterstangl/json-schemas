@@ -3,6 +3,7 @@
 
 import argparse
 import json, textwrap, re
+import tempfile
 from typing import Any
 from pathlib import Path
 
@@ -261,14 +262,33 @@ def to_latex_with_pypandoc(md_path, tex_path):
     except ImportError:
         raise SystemExit("pypandoc not installed. `pip install pypandoc pandoc-minted`")
 
-    # Markdown → LaTeX (minted)
-    tex = pypandoc.convert_file(
-        md_path, to="latex",
-        extra_args=[
-            "--filter=pandoc-minted",
-            "--natbib",
-        ]
-    )
+    lua_code = r"""
+        function CodeBlock(el)
+            local lang = (el.classes and el.classes[1]) or "text"
+            local opts = {}
+            for k, v in pairs(el.attributes or {}) do
+                table.insert(opts, k .. "=" .. v)
+            end
+            local optstr = (#opts > 0) and ("[" .. table.concat(opts, ",") .. "]") or ""
+            local body = el.text or ""
+            local out = "\\begin{minted}" .. optstr .. "{" .. lang .. "}\n"
+                    .. body .. "\n\\end{minted}"
+            return pandoc.RawBlock("latex", out)
+        end
+    """
+
+    # Markdown → LaTeX (minted code blocks via Lua filter)
+    with tempfile.NamedTemporaryFile("w+", suffix=".lua") as f:
+        f.write(lua_code)
+        f.flush()
+        tex = pypandoc.convert_file(
+            md_path, to="latex",
+            extra_args=[
+                f"--lua-filter={f.name}",
+                "--natbib",
+            ]
+        )
+
     # Turn \citep and \citet into plain \cite
     tex = re.sub(r'\s*\\cite[p|t]?', r'~\\cite', tex)
     with open(tex_path, 'w') as f:
