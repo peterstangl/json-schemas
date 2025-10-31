@@ -302,7 +302,7 @@ An object representing the central values of the polynomial coefficients for the
 Example:
 
 
-Specifying three observable predictions, $O_{m}$, given by
+Specifying three observable predictions, $O_{m}$, given in terms of the three real parameters $C_1$, $C_2$, and $C_3$ as
 
 $$
 \begin{aligned}
@@ -328,7 +328,7 @@ An object representing the central values of the polynomial coefficients for eac
 Example:
 
 
-Specifying two polynomials, $P_k$, given by
+Specifying two polynomials, $P_k$, given given in terms of two complex parameters $C_1$ and $C_2$ as
 
 $$\begin{aligned}
     P_1 &=1.0 + 1.2 \,\mathrm{Im}(C_1) + 0.8 \,\mathrm{Re}(C_1) \mathrm{Re}(C_2) + 0.5 \,\mathrm{Re}(C_1) \mathrm{Im}(C_2)+ 0.2 \,\mathrm{Im}(C_1) \mathrm{Im}(C_2)\,, \\
