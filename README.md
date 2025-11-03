@@ -306,7 +306,7 @@ Specifying three observable predictions, $O_{m}$, given in terms of the three re
 
 $$
 \begin{aligned}
-    O_1 &=1.0 + 1.1 \,C_1 + 1.4 \,C_1C_2+ 1.6 \,C_1C_3\,, \\
+    O_1 &=1.0 + 1.2 \,C_1 + 1.4 \,C_1C_2+ 1.6 \,C_1C_3\,, \\
     O_2 &= 1.1 + 1.3 \,C_1 + 1.5 \,C_1C_2+ 1.7 \,C_1C_3\,, \\
     O_3 &= 2.3 + 0.3\,C_1 + 0.7 \,C_1C_2 + 0.5 \,C_1C_3\,.
 \end{aligned}
@@ -330,7 +330,8 @@ Example:
 
 Specifying two polynomials, $P_k$, given given in terms of two complex parameters $C_1$ and $C_2$ as
 
-$$\begin{aligned}
+$$
+\begin{aligned}
     P_1 &=1.0 + 1.2 \,\mathrm{Im}(C_1) + 0.8 \,\mathrm{Re}(C_1) \mathrm{Re}(C_2) + 0.5 \,\mathrm{Re}(C_1) \mathrm{Im}(C_2)+ 0.2 \,\mathrm{Im}(C_1) \mathrm{Im}(C_2)\,, \\
     P_2 &= 1.1 + 1.3 \,\mathrm{Im}(C_1)  + 0.85 \,\mathrm{Re}(C_1) \mathrm{Re}(C_2) + 0.55 \,\mathrm{Re}(C_1) \mathrm{Im}(C_2)+ 0.25 \,\mathrm{Im}(C_1) \mathrm{Im}(C_2)\,.
 \end{aligned}
