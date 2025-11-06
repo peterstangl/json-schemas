@@ -263,6 +263,7 @@ def to_latex_with_pypandoc(md_path, tex_path):
         raise SystemExit("pypandoc not installed. `pip install pypandoc pandoc-minted`")
 
     lua_code = r"""
+        -- 1) Code blocks -> minted (inline code left to Pandoc -> \texttt{...} with proper escaping)
         function CodeBlock(el)
             local lang = (el.classes and el.classes[1]) or "text"
             local opts = {}
@@ -274,6 +275,63 @@ def to_latex_with_pypandoc(md_path, tex_path):
             local out = "\\begin{minted}" .. optstr .. "{" .. lang .. "}\n"
                     .. body .. "\n\\end{minted}"
             return pandoc.RawBlock("latex", out)
+        end
+
+        -- helper: Para/Plain containing only ONE DisplayMath inline?
+        local function is_display_math_para(b)
+            if not (b.t == "Para" or b.t == "Plain") then return false end
+            if #b.c ~= 1 then return false end
+            local el = b.c[1]
+            return el.t == "Math" and el.mathtype == "DisplayMath"
+        end
+
+        -- merge display-math paras into the previous Para/Plain within a block list
+        local function merge_display_math_blocks(blocks)
+            local out = {}
+            for i = 1, #blocks do
+                local b = blocks[i]
+                if is_display_math_para(b) and #out > 0 and (out[#out].t == "Para" or out[#out].t == "Plain") then
+                    local m = b.c[1]
+                    local mathsrc = m.text or m.c[2]  -- raw math contents
+                    table.insert(out[#out].c, pandoc.Space())
+                    table.insert(out[#out].c, pandoc.RawInline("latex", "\\[" .. mathsrc .. "\\]"))
+                    -- skip pushing b
+                else
+                    -- recurse into containers that hold block lists
+                    if b.t == "BlockQuote" then
+                        b.content = merge_display_math_blocks(b.content)
+                    elseif b.t == "Div" then
+                        b.content = merge_display_math_blocks(b.content)
+                    elseif b.t == "Note" then
+                        b.content = merge_display_math_blocks(b.content)
+                    elseif b.t == "BulletList" then
+                        for j = 1, #b.c do
+                            b.c[j] = merge_display_math_blocks(b.c[j])
+                        end
+                    elseif b.t == "OrderedList" then
+                        local olattr, items = b.c[1], b.c[2]
+                        for j = 1, #items do
+                            items[j] = merge_display_math_blocks(items[j])
+                        end
+                        b.c = {olattr, items}
+                    elseif b.t == "DefinitionList" then
+                        for j = 1, #b.c do
+                        local term, defs = b.c[j][1], b.c[j][2]
+                        for k = 1, #defs do
+                            defs[k] = merge_display_math_blocks(defs[k])
+                        end
+                        b.c[j] = {term, defs}
+                        end
+                    end
+                    table.insert(out, b)
+                end
+            end
+            return out
+        end
+
+        function Pandoc(doc)
+            doc.blocks = merge_display_math_blocks(doc.blocks)
+            return doc
         end
     """
 
