@@ -55,7 +55,7 @@ Example:
 
 ### `scale` (required, *type: number, array*)
 
-The renormalisation scale in GeV at which the parameter vector $\vec{C}$, the polynomial coefficients $\vec p_k$, and the observable coefficients $\vec o_m$ are defined. The parameters $\vec{C}$ that enter a given polynomial $P_k$ or observable $O_m$ have to be given at the same scale at which the polynomial coefficients $\vec{p}_k$ or observable coefficients $\vec{o}_m$ are defined, such that the polynomial or observable itself is scale-independent up to higher-order corrections in perturbation theory.
+The renormalisation scale in GeV at which the parameter vector $\vec{C}$, the polynomial coefficients $\vec p_k$, and the observable coefficients $\vec o_m$ are defined. The parameter vector $\vec{C}$ that enters a given polynomial $P_k$ or observable $O_m$ has to be given at the same scale at which the polynomial coefficients $\vec{p}_k$ or observable coefficients $\vec{o}_m$ are defined, such that the polynomial or observable itself is scale-independent up to higher-order corrections in perturbation theory.
 
 This field can take one of two forms:
 
