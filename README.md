@@ -81,7 +81,7 @@ Examples:
 
 ### `polynomial_names` (optional, *type: array of string*)
 
-*The presence of this field requires the simultaneous presence of `metadata.observable_expressions` and `data.polynomial_central`.*
+*This field is required to express observables as functions of polynomials. It requires the simultaneous presence of `metadata.observable_expressions` and `data.polynomial_central`.*
 
 Array of names identifying the individual polynomials that enter the observable predictions through the functions defined in `metadata.observable_expressions`. Must contain unique, non-empty strings.
 
@@ -93,7 +93,7 @@ Example:
 
 ### `observable_expressions` (optional, *type: array of object*)
 
-*The presence of this field requires the simultaneous presence of `metadata.polynomial_names` and `data.polynomial_central`.*
+*This field is required to express observables as functions of polynomials. It requires the simultaneous presence of `metadata.polynomial_names` and `data.polynomial_central`.*
 
 Defines how each observable is constructed from the named polynomials. Must be an array of $M$ objects, one per observable. The length and order of the array must match those of the `observable_names` field. Each object must contain:
 
@@ -331,7 +331,7 @@ $$
 
 ### `polynomial_central` (optional, *type: object*)
 
-*The presence of this field requires the simultaneous presence of `metadata.polynomial_names` and `metadata.observable_expressions`.*
+*This field is required to express observables as functions of polynomials. It requires the simultaneous presence of `metadata.polynomial_names` and `metadata.observable_expressions`.*
 
 An object representing the central values of the polynomial coefficients for each named polynomial, $\vec{p}_k$. Each key must be a monomial key as defined above. The values must be an array of $K$ numbers whose order matches `metadata.polynomial_names`.
 
