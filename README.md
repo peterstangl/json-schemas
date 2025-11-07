@@ -55,19 +55,35 @@ Example:
 
 ### `scale` (required, *type: number, array*)
 
-The renormalisation scale in GeV at which the parameter vector $\vec{C}$ is defined. This field can take one of two forms:
+The renormalisation scale in GeV at which the parameter vector $\vec{C}$, the polynomial coefficients $\vec p_k$, and the observable coefficients $\vec o_m$ are defined. The parameters $\vec{C}$ that enter a given polynomial $P_k$ or observable $O_m$ have to be given at the same scale at which the polynomial coefficients $\vec{p}_k$ or observable coefficients $\vec{o}_m$ are defined, such that the polynomial or observable itself is scale-independent up to higher-order corrections in perturbation theory.
 
-- a single number, $\mu$: interpreted as the common scale for all observables. The polynomial expression for observable $O_m$ is understood to be a function of the parameters evolved to that common scale:
+This field can take one of two forms:
 
-  $$O_m = a_m + \vec{C}(\mu) \cdot \vec{b}_m(\mu) + \dots\ $$
+- **single number**: A common scale $\mu$ at which all polynomial coefficients $\vec p_k$ or observable coefficients $\vec o_m$ are defined.
 
-- an array of numbers, $\mu_m$: defining a separate scale for each observable. The array must have the same length $M$ as the array of observables. The polynomial expression for observable $O_m$ is understood to be a function of the parameters evolved to its corresponding scale:
+  - If the observables $O_m$ are expressed in terms of polynomials $P_k$, the polynomials are functions of the parameters evolved to the common scale $\mu$:
 
-  $$O_m = a_m + \vec{C}(\mu_m) \cdot \vec{b}_m(\mu_m) + \dots\ $$
+    $$P_k = a_{k} + \vec{C}(\mu) \cdot \vec{b}_{k}(\mu) + \dots\ $$
 
-  The array-of-numbers form is restricted in function-of-polynomials mode (see  Appendix A for details).
+  - If the observables $O_m$ are themselves polynomials, they are themselves functions of the parameters evolved to the common scale $\mu$:
 
-For a given observable, the observable coefficients ${\vec{o}_m \supset \vec{b}_m, \vec{c}_m, \dots}$ depend on the scale at which the parameters are defined, such that the observable itself is scale independent up to higher-order corrections in perturbation theory.
+    $$O_m = a_m + \vec{C}(\mu) \cdot \vec{b}_m(\mu) + \dots\ $$
+
+- **array of numbers**: An array defining separate scales $\mu_k$ of polynomial coefficients $\vec p_k$  if `metadata.polynomial_names` is present, or separate scales $\mu_m$ of observable coefficients $\vec o_m$ if `metadata.polynomial_names` is absent.
+
+  - If `metadata.polynomial_names` is present, the observables $O_m$ are expressed in terms of polynomials $P_k$ and each polynomial is a function of the parameters evolved to its corresponding scale $\mu_k$:
+
+    $$P_k = a_{k} + \vec{C}(\mu_k) \cdot \vec{b}_{k}(\mu_k) + \dots\ $$
+
+    The length and order of the array defining the scales $\mu_k$ must match those of the field `metadata.polynomial_names`. To avoid ambiguities, the following restrictions apply to this case:
+
+    - `data.observable_central` must be absent;
+    - `data.observable_uncertainties` must be absent or only define uncertainties for the parameter-independent terms (i.e. only the SM uncertainties in EFT applications).
+  - If `metadata.polynomial_names` is absent, the observables $O_m$ are themselves polynomials and each observable is a function of the parameters evolved to its corresponding scale $\mu_m$:
+
+    $$O_m = a_m + \vec{C}(\mu_m) \cdot \vec{b}_m(\mu_m) + \dots\ $$
+
+    The length and order of the array defining the scales $\mu_m$ must match those of the field `metadata.observable_names`.
 
 Examples:
 
