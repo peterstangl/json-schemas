@@ -294,10 +294,10 @@ Each polynomial coefficient is labelled by a *monomial key*, written as a string
   - A quadratic term $C_1 C_2$ is written as `"('C1', 'C2')"`.
 - To handle complex parameters, the tuple may optionally include a real/imaginary tag as its final element. This tag consists of `R` (real) and `I` (imaginary) characters, and its length must match the polynomial order $k$. It indicates whether each parameter refers to its real or imaginary part. For example:
   - `"('', 'C1', 'RI')"` corresponds to $\mathrm{Im}(C_1)$;
-  - `"('C1', 'C2', 'IR')"` corresponds to $\mathrm{Im}(C_1)\,\mathrm{Re}(C_2)$.
+  - `"('C1', 'C2', 'IR')"` corresponds to $\mathrm{Im}(C_1)\mathrm{Re}(C_2)$.
 - If the real/imaginary tag is omitted, the parameters are assumed to be real. For example:
   - `"('', 'C1')"` corresponds to $\mathrm{Re}(C_1)$;
-  - `"('C1', 'C2')"` corresponds to $\mathrm{Re}(C_1)\,\mathrm{Re}(C_2)$.
+  - `"('C1', 'C2')"` corresponds to $\mathrm{Re}(C_1)\mathrm{Re}(C_2)$.
 
 These conventions ensure a canonical and unambiguous representation of polynomial terms while offering flexibility in the naming of model parameters. Missing monomials are implicitly treated as having zero coefficients.
 
