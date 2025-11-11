@@ -1,6 +1,17 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://json.schemastore.org/popxf-corr-1.0.json",
+  "$defs": {
+    "observable_names": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    }
+  },
   "type": "object",
   "properties": {
     "$schema": {
@@ -12,33 +23,33 @@
   "additionalProperties": {
     "type": "object",
     "properties": {
-      "row_names": {
-        "type": "array",
-        "items": { "type": "string" }
-      },
-      "col_names": {
-        "type": "array",
-        "items": { "type": "string" }
-      },
+      "row_names": { "$ref": "#/$defs/observable_names" },
+      "col_names": { "$ref": "#/$defs/observable_names" },
       "correlations": {
         "type": "object",
         "additionalProperties": {
           "oneOf": [
             {
               "type": "array",
+              "minItems": 1,
               "items": {
                 "type": "array",
+                "minItems": 1,
                 "items": { "type": "number" }
               }
             },
             {
               "type": "array",
+              "minItems": 1,
               "items": {
                 "type": "array",
+                "minItems": 1,
                 "items": {
                   "type": "array",
+                  "minItems": 1,
                   "items": {
                     "type": "array",
+                    "minItems": 1,
                     "items": { "type": "number" }
                   }
                 }
