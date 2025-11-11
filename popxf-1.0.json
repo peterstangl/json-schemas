@@ -2,29 +2,42 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://json.schemastore.org/popxf-1.0.json",
   "$defs": {
-    "monomialKeyPatternDeg1": {
+    "monomialKeyPatternConstant": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 1,
       "propertyNames": {
-        "pattern": "^\\(\\s*'[^']*'\\s*,\\s*(?:'([IR])')?\\s*,?\\s*\\)$"
+        "pattern": "^\\(\\s*''\\s*,(\\s*'[IR]+'\\s*,?)?\\s*\\)$|^\\(\\s*(''\\s*,\\s*)+''(\\s*,\\s*'[IR]+')?\\s*,?\\s*\\)$"
+      }
+    },
+    "monomialKeyPatternDeg1": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^\\(\\s*'[^']*'\\s*,\\s*('[IR]')?\\s*,?\\s*\\)$"
       }
     },
     "monomialKeyPatternDeg2": {
+      "type": "object",
       "propertyNames": {
-        "pattern": "^\\(\\s*(?:'[^']*'\\s*,\\s*){1}'[^']*'(?:,\\s*'([IR]{2})')?\\s*,?\\s*\\)$"
+        "pattern": "^\\(\\s*('[^']*'\\s*,\\s*){1}'[^']*'(\\s*,\\s*'[IR]{2}')?\\s*,?\\s*\\)$"
       }
     },
     "monomialKeyPatternDeg3": {
+      "type": "object",
       "propertyNames": {
-        "pattern": "^\\(\\s*(?:'[^']*'\\s*,\\s*){2}'[^']*'(?:,\\s*'([IR]{3})')?\\s*,?\\s*\\)$"
+        "pattern": "^\\(\\s*('[^']*'\\s*,\\s*){2}'[^']*'(\\s*,\\s*'[IR]{3}')?\\s*,?\\s*\\)$"
       }
     },
     "monomialKeyPatternDeg4": {
+      "type": "object",
       "propertyNames": {
-        "pattern": "^\\(\\s*(?:'[^']*'\\s*,\\s*){3}'[^']*'(?:,\\s*'([IR]{4})')?\\s*,?\\s*\\)$"
+        "pattern": "^\\(\\s*('[^']*'\\s*,\\s*){3}'[^']*'(\\s*,\\s*'[IR]{4}')?\\s*,?\\s*\\)$"
       }
     },
     "monomialKeyPatternDeg5": {
+      "type": "object",
       "propertyNames": {
-        "pattern": "^\\(\\s*(?:'[^']*'\\s*,\\s*){4}'[^']*'(?:,\\s*'([IR]{5})')?\\s*,?\\s*\\)$"
+        "pattern": "^\\(\\s*('[^']*'\\s*,\\s*){4}'[^']*'(\\s*,\\s*'[IR]{5}')?\\s*,?\\s*\\)$"
       }
     }
   },
@@ -572,6 +585,38 @@
     },
     {
       "if": {
+        "properties": {
+          "metadata": {
+            "required": ["polynomial_names", "scale"],
+            "properties": { "scale": { "type": "array" } }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "allOf": [
+              { "not": { "required": ["observable_central"] } },
+              {
+                "properties": {
+                  "observable_uncertainties": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "oneOf": [
+                        { "type": "array", "items": { "type": "number" } },
+                        { "$ref": "#/$defs/monomialKeyPatternConstant" }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
         "not": {
           "properties": {
             "metadata": { "required": ["polynomial_order"] }
@@ -624,7 +669,6 @@
                 "additionalProperties": {
                   "oneOf": [
                     {
-                      "type": "object",
                       "$ref": "#/$defs/monomialKeyPatternDeg1"
                     },
                     {
@@ -659,7 +703,6 @@
                 "additionalProperties": {
                   "oneOf": [
                     {
-                      "type": "object",
                       "$ref": "#/$defs/monomialKeyPatternDeg2"
                     },
                     {
@@ -694,7 +737,6 @@
                 "additionalProperties": {
                   "oneOf": [
                     {
-                      "type": "object",
                       "$ref": "#/$defs/monomialKeyPatternDeg3"
                     },
                     {
@@ -729,7 +771,6 @@
                 "additionalProperties": {
                   "oneOf": [
                     {
-                      "type": "object",
                       "$ref": "#/$defs/monomialKeyPatternDeg4"
                     },
                     {
@@ -764,7 +805,6 @@
                 "additionalProperties": {
                   "oneOf": [
                     {
-                      "type": "object",
                       "$ref": "#/$defs/monomialKeyPatternDeg5"
                     },
                     {
