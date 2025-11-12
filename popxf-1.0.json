@@ -647,11 +647,23 @@
     },
     {
       "if": {
-        "not": {
-          "properties": {
-            "metadata": { "required": ["polynomial_order"] }
+        "oneOf":[
+          {
+            "not": {
+              "properties": {
+                "metadata": { "required": ["polynomial_order"] }
+              }
+            }
+          },
+          {
+            "properties": {
+              "metadata": {
+                "properties": { "polynomial_order": { "const": 2 } },
+                "required": ["polynomial_order"]
+              }
+            }
           }
-        }
+        ]
       },
       "then": {
         "properties": {
@@ -700,40 +712,6 @@
                   "oneOf": [
                     {
                       "$ref": "#/$defs/monomialKeyPatternDeg1"
-                    },
-                    {
-                      "type": "array",
-                      "items": { "type": "number" }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    {
-      "if": {
-        "properties": {
-          "metadata": {
-            "properties": { "polynomial_order": { "const": 2 } },
-            "required": ["polynomial_order"]
-          }
-        }
-      },
-      "then": {
-        "properties": {
-          "data": {
-            "patternProperties": {
-              "^(observable_central|polynomial_central)$": {
-                "$ref": "#/$defs/monomialKeyPatternDeg2"
-              },
-              "^observable_uncertainties$": {
-                "additionalProperties": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/$defs/monomialKeyPatternDeg2"
                     },
                     {
                       "type": "array",
