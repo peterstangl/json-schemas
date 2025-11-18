@@ -13,7 +13,7 @@
     "monomialKeyPatternDeg1": {
       "type": "object",
       "propertyNames": {
-        "pattern": "^\\(\\s*'[^']*'\\s*,\\s*('[IR]')?\\s*,?\\s*\\)$"
+        "pattern": "^\\(\\s*'[^']*'\\s*,\\s*('[IR]'\\s*,?)?\\s*\\)$"
       }
     },
     "monomialKeyPatternDeg2": {
