@@ -3,14 +3,20 @@
   "$id": "https://json.schemastore.org/popxf-1.0.json",
   "definitions": {
     "conditionScaleArrayPolynomial": {
+      "type": "object",
       "properties": {
         "metadata": {
-          "required": ["polynomial_names", "scale"],
-          "properties": { "scale": { "type": "array" } }
+          "type": "object",
+          "properties": {
+            "polynomial_names": {},
+            "scale": { "type": "array" }
+          },
+          "required": ["polynomial_names", "scale"]
         }
       }
     },
     "stringifiedTuplePattern": {
+      "type": "string",
       "pattern": "^\\(\\s*'[^']*'\\s*(,|(,\\s*'[^']*'\\s*)+\\s*,?)\\s*\\)$"
     },
     "monomialKeyPatternDeg1": {
@@ -162,8 +168,16 @@
             }
           },
           "anyOf": [
-            { "required": ["wcxf"] },
-            { "required": ["custom"] }
+            {
+              "type": "object",
+              "properties": { "wcxf": {} },
+              "required": ["wcxf"]
+            },
+            {
+              "type": "object",
+              "properties": { "custom": {} },
+              "required": ["custom"]
+            }
           ],
           "additionalProperties": false,
           "examples": [
@@ -298,22 +312,26 @@
                       "description": "An object representing a uni- or multi-variate normal distribution describing one or more possibly correlated input parameters with uncertainties. This object can contain the subfields `mean`, `std`, and `corr`. If the key of the object is a stringified tuple of $N$ input names (e.g., `\"('m1','m2')\"` with $N = 2$), describing a group of $N$ possibly correlated input parameters, then `mean` and (if present) `std` must be arrays of length $N$, and (if present) `corr` must be an $N \\times N$ matrix, expressed as an array of $N$ arrays of $N$ numbers. The subfields are defined as follows:",
                       "properties": {
                         "mean": {
-                          "type": [
-                            "number",
-                            "array"
-                          ],
-                          "minItems": 2,
-                          "items": { "type": "number" },
-                          "description": "central value / mean; a single number for a single input name, or an array of numbers for a group of input names;"
+                          "description": "central value / mean; a single number for a single input name, or an array of numbers for a group of input names;",
+                          "anyOf": [
+                            { "type": "number" },
+                            {
+                              "type": "array",
+                              "minItems": 2,
+                              "items": { "type": "number" }
+                            }
+                          ]
                         },
                         "std": {
-                          "type": [
-                            "number",
-                            "array"
-                          ],
-                          "minItems": 2,
-                          "items": { "type": "number" },
-                          "description": "uncertainty / standard deviation; a single number for a single input name, or an array of numbers for a group of input names;"
+                          "description": "uncertainty / standard deviation; a single number for a single input name, or an array of numbers for a group of input names;",
+                          "anyOf": [
+                            { "type": "number" },
+                            {
+                              "type": "array",
+                              "minItems": 2,
+                              "items": { "type": "number" }
+                            }
+                          ]
                         },
                         "corr": {
                           "type": "array",
@@ -346,19 +364,23 @@
                           "minProperties": 1,
                           "description": "an object where each key is a user-defined name of a parameter of the probability distribution, and each value is a single number in the univariate case, or an array of numbers or arrays in the multivariate case (e.g. `{\"a\":0, \"b\":1}` for a uniform distribution with boundaries $a$ and $b$).",
                           "additionalProperties": {
-                            "type": [
-                              "number",
-                              "array"
-                            ],
-                            "minItems": 2,
-                            "items": {
-                              "type": [
-                                "number",
-                                "array"
-                              ],
-                              "minItems": 2,
-                              "items": { "type": "number"}
-                            }
+                            "anyOf": [
+                              { "type": "number" },
+                              {
+                                "type": "array",
+                                "minItems": 2,
+                                "items": {
+                                  "anyOf": [
+                                    { "type": "number" },
+                                    {
+                                      "type": "array",
+                                      "minItems": 2,
+                                      "items": { "type": "number" }
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
                           }
                         },
                         "distribution_description": {
@@ -619,8 +641,16 @@
         }
       },
       "anyOf": [
-        { "required": ["observable_central"] },
-        { "required": ["polynomial_central"] }
+        {
+          "type": "object",
+          "properties": { "observable_central": {}},
+          "required": ["observable_central"]
+        },
+        {
+          "type": "object",
+          "properties": { "polynomial_central": {}},
+          "required": ["polynomial_central"]
+        }
       ],
       "additionalProperties": false
     }
@@ -635,24 +665,40 @@
     {
       "if": {
         "properties": {
-          "metadata": { "required": ["polynomial_names"] }
+          "metadata": {
+            "type": "object",
+            "properties": { "polynomial_names": {}},
+            "required": ["polynomial_names"]
+          }
         }
       },
       "then": {
         "properties": {
-          "data": { "required": ["polynomial_central"] }
+          "data": {
+            "type": "object",
+            "properties": { "polynomial_central": {}},
+            "required": ["polynomial_central"]
+          }
         }
       }
     },
     {
       "if": {
         "properties": {
-          "data": { "required": ["polynomial_central"] }
+          "data": {
+            "type": "object",
+            "properties": { "polynomial_central": {}},
+            "required": ["polynomial_central"]
+          }
         }
       },
       "then": {
         "properties": {
-          "metadata": { "required": ["polynomial_names"] }
+          "metadata": {
+            "type": "object",
+            "properties": { "polynomial_names": {}},
+            "required": ["polynomial_names"]
+          }
         }
       }
     },
@@ -663,7 +709,11 @@
       "then": {
         "properties": {
           "data": {
-            "not": { "required": ["observable_central"] }
+            "not": {
+              "type": "object",
+              "properties": { "observable_central": {}},
+              "required": ["observable_central"]
+            }
           }
         }
       }
@@ -674,13 +724,18 @@
           {
             "not": {
               "properties": {
-                "metadata": { "required": ["polynomial_degree"] }
+                "metadata": {
+                  "type": "object",
+                  "properties": { "polynomial_degree": {}},
+                  "required": ["polynomial_degree"]
+                }
               }
             }
           },
           {
             "properties": {
               "metadata": {
+                "type": "object",
                 "properties": { "polynomial_degree": { "const": 2 } },
                 "required": ["polynomial_degree"]
               }
@@ -693,11 +748,13 @@
           {
             "properties": {
               "data": {
+                "type": "object",
                 "patternProperties": {
                   "^(observable_central|polynomial_central)$": {
                     "$ref": "#/definitions/monomialKeyPatternDeg2"
                   },
                   "^observable_uncertainties$": {
+                    "type": "object",
                     "propertyNames": {
                       "not": { "$ref": "#/definitions/stringifiedTuplePattern" }
                     },
@@ -717,6 +774,7 @@
             "then": {
               "properties": {
                 "data": {
+                  "type": "object",
                   "properties": {
                     "observable_uncertainties": {
                       "type": "object",
@@ -739,6 +797,7 @@
       "if": {
         "properties": {
           "metadata": {
+            "type": "object",
             "properties": { "polynomial_degree": { "const": 1 } },
             "required": ["polynomial_degree"]
           }
@@ -749,11 +808,13 @@
           {
             "properties": {
               "data": {
+                "type": "object",
                 "patternProperties": {
                   "^(observable_central|polynomial_central)$": {
                     "$ref": "#/definitions/monomialKeyPatternDeg1"
                   },
                   "^observable_uncertainties$": {
+                    "type": "object",
                     "propertyNames": {
                       "not": { "$ref": "#/definitions/stringifiedTuplePattern" }
                     },
@@ -773,6 +834,7 @@
             "then": {
               "properties": {
                 "data": {
+                  "type": "object",
                   "properties": {
                     "observable_uncertainties": {
                       "type": "object",
@@ -795,6 +857,7 @@
       "if": {
         "properties": {
           "metadata": {
+            "type": "object",
             "properties": { "polynomial_degree": { "const": 3 } },
             "required": ["polynomial_degree"]
           }
@@ -805,11 +868,13 @@
           {
             "properties": {
               "data": {
+                "type": "object",
                 "patternProperties": {
                   "^(observable_central|polynomial_central)$": {
                     "$ref": "#/definitions/monomialKeyPatternDeg3"
                   },
                   "^observable_uncertainties$": {
+                    "type": "object",
                     "propertyNames": {
                       "not": { "$ref": "#/definitions/stringifiedTuplePattern" }
                     },
@@ -829,6 +894,7 @@
             "then": {
               "properties": {
                 "data": {
+                  "type": "object",
                   "properties": {
                     "observable_uncertainties": {
                       "type": "object",
@@ -851,6 +917,7 @@
       "if": {
         "properties": {
           "metadata": {
+            "type": "object",
             "properties": { "polynomial_degree": { "const": 4 } },
             "required": ["polynomial_degree"]
           }
@@ -861,11 +928,13 @@
           {
             "properties": {
               "data": {
+                "type": "object",
                 "patternProperties": {
                   "^(observable_central|polynomial_central)$": {
                     "$ref": "#/definitions/monomialKeyPatternDeg4"
                   },
                   "^observable_uncertainties$": {
+                    "type": "object",
                     "propertyNames": {
                       "not": { "$ref": "#/definitions/stringifiedTuplePattern" }
                     },
@@ -885,6 +954,7 @@
             "then": {
               "properties": {
                 "data": {
+                  "type": "object",
                   "properties": {
                     "observable_uncertainties": {
                       "type": "object",
@@ -907,6 +977,7 @@
       "if": {
         "properties": {
           "metadata": {
+            "type": "object",
             "properties": { "polynomial_degree": { "const": 5 } },
             "required": ["polynomial_degree"]
           }
@@ -917,11 +988,13 @@
           {
             "properties": {
               "data": {
+                "type": "object",
                 "patternProperties": {
                   "^(observable_central|polynomial_central)$": {
                     "$ref": "#/definitions/monomialKeyPatternDeg5"
                   },
                   "^observable_uncertainties$": {
+                    "type": "object",
                     "propertyNames": {
                       "not": { "$ref": "#/definitions/stringifiedTuplePattern" }
                     },
@@ -941,6 +1014,7 @@
             "then": {
               "properties": {
                 "data": {
+                  "type": "object",
                   "properties": {
                     "observable_uncertainties": {
                       "type": "object",
