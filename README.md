@@ -319,32 +319,6 @@ These conventions ensure a canonical and unambiguous representation of polynomia
 
  The `data` field is a `JSON` object with the following subfields:
 
-### `observable_central` (optional, *type: object*)
-
-An object representing the central values of the observable coefficients $\vec{o}_m$ for each observable<span>&nbsp;</span>$O_m$. In case the observables are not themselves polynomials, the observable coefficients correspond to the polynomial approximation of the observables obtained from a Taylor expansion of the observable expressions defined in `metadata.observable_expressions`. Each key must be a monomial key as defined above. Each value must be an array of $M$ numbers whose order matches `metadata.observable_names`.
-
-Example:
-
-
-Specifying three observable predictions, $O_{m}$, given in terms of the three real parameters $C_1$, $C_2$, and $C_3$ as
-
-$$
-\begin{aligned}
-    O_1 &= 1.0 + 1.2 \ C_1 + 1.4 \ C_1C_2+ 1.6 \ C_1C_3\ , \\
-    O_2 &= 1.1 + 1.3 \ C_1 + 1.5 \ C_1C_2+ 1.7 \ C_1C_3\ , \\
-    O_3 &= 2.3 + 0.3\ C_1 + 0.7 \ C_1C_2 + 0.5 \ C_1C_3\ .
-\end{aligned}
-$$
-
-```json
-  "observable_central": {
-    "('', '')": [1.0, 1.1, 2.3],
-    "('', 'C1')": [1.2, 1.3, 0.3],
-    "('C1', 'C2')": [1.4, 1.5, 0.7],
-    "('C1', 'C3')": [1.6, 1.7, 0.5]
-  }
-```
-
 ### `polynomial_central` (optional, *type: object*)
 
 *This field is required to express observables as functions of polynomials. It requires the simultaneous presence of `metadata.polynomial_names` and `metadata.observable_expressions`.*
@@ -370,6 +344,32 @@ $$
     "('C1', 'C2', 'RR')": [0.8, 0.85],
     "('C1', 'C2', 'RI')": [0.5, 0.55],
     "('C1', 'C2', 'II')": [0.2, 0.25]
+  }
+```
+
+### `observable_central` (optional, *type: object*)
+
+An object representing the central values of the observable coefficients $\vec{o}_m$ for each observable<span>&nbsp;</span>$O_m$. In case the observables are not themselves polynomials, the observable coefficients correspond to the polynomial approximation of the observables obtained from a Taylor expansion of the observable expressions defined in `metadata.observable_expressions`. Each key must be a monomial key as defined above. Each value must be an array of $M$ numbers whose order matches `metadata.observable_names`.
+
+Example:
+
+
+Specifying three observable predictions, $O_{m}$, given in terms of the three real parameters $C_1$, $C_2$, and $C_3$ as
+
+$$
+\begin{aligned}
+    O_1 &= 1.0 + 1.2 \ C_1 + 1.4 \ C_1C_2+ 1.6 \ C_1C_3\ , \\
+    O_2 &= 1.1 + 1.3 \ C_1 + 1.5 \ C_1C_2+ 1.7 \ C_1C_3\ , \\
+    O_3 &= 2.3 + 0.3\ C_1 + 0.7 \ C_1C_2 + 0.5 \ C_1C_3\ .
+\end{aligned}
+$$
+
+```json
+  "observable_central": {
+    "('', '')": [1.0, 1.1, 2.3],
+    "('', 'C1')": [1.2, 1.3, 0.3],
+    "('C1', 'C2')": [1.4, 1.5, 0.7],
+    "('C1', 'C3')": [1.6, 1.7, 0.5]
   }
 ```
 
